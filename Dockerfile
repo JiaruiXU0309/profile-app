@@ -14,9 +14,14 @@ RUN npm ci --omit=dev
 
 COPY ./app .
 # NEW
+RUN addgroup -g 1001 -S appgroup && adduser -S appuser -u 1001 -G appgroup
+WORKDIR /home/app
 COPY ./entrypoint.sh /usr/local/bin/entrypoint.sh
-# NEW
 RUN chmod +x /usr/local/bin/entrypoint.sh
+# NEW
+RUN chown -R appuser:appgroup /home/app
+# NEW
+USER appuser
 EXPOSE 3000
 
 ENTRYPOINT ["entrypoint.sh"]
